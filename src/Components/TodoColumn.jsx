@@ -36,9 +36,16 @@ const TodoColumn = ({ type }) => {
   return (
     <div ref={ref} className="border rounded p-4 w-1/3">
       <h2 className="font-bold text-lg mb-4">{type}</h2>
-      {todos.map((todo, index) => (
-        <TodoItem key={todo.id} todo={todo} index={index} type={type} moveItem={moveItem} />
-      ))}
+      {
+        (todos.length>0)?(
+          todos.map((todo, index) => (
+            <TodoItem key={todo.id} todo={todo} index={index} type={type} moveItem={moveItem} />
+          ))
+        )
+        :(
+          <p>No Todos</p>
+        )
+      }
     </div>
   );
 };

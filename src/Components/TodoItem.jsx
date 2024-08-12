@@ -9,7 +9,6 @@ const ItemTypes = {
 };
 
 const TodoItem = ({ todo, index, type, moveItem }) => {
-  console.log({ todo, index, type, moveItem });
   const ref = useRef(null);
   const dispatch = useDispatch();
 

@@ -153,6 +153,7 @@ const TodoList = () => {
         >
           Add Todo
         </button>
+        <button className='bg-blue-500 text-white px-4 py-2 rounded ml-3'>Add Todo Container</button>
         <div className="flex justify-between mt-4">
           {/* <TodoColumn type="Todo" />
           <TodoColumn type="Progress" />

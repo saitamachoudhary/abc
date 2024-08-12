@@ -12,6 +12,10 @@ const todoSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
+    addTodocontainerdiv:(state,action)=>{
+      
+    }
+    ,
     addTodo: (state, action) => {
       const { type, title, message } = action.payload;
       const item = state.items.find(item => item.type === type);
