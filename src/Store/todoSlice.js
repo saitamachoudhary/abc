@@ -13,7 +13,8 @@ const todoSlice = createSlice({
   initialState,
   reducers: {
     addTodocontainerdiv:(state,action)=>{
-      
+      const{type}=action.payload;
+      state.items.push({id:nanoid(),type:type,childrens:[]})
     }
     ,
     addTodo: (state, action) => {
@@ -55,5 +56,5 @@ const todoSlice = createSlice({
   },
 });
 
-export const { addTodo, moveTodo, reorderTodo,deleteTodo} = todoSlice.actions;
+export const { addTodo, moveTodo, reorderTodo,deleteTodo,addTodocontainerdiv} = todoSlice.actions;
 export default todoSlice.reducer;

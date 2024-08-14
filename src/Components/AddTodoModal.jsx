@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector} from 'react-redux';
 import { addTodo } from '../Store/todoSlice';
 
 const AddTodoModal = ({ isOpen, onClose }) => {
@@ -7,9 +7,12 @@ const AddTodoModal = ({ isOpen, onClose }) => {
   const [message, setMessage] = useState('');
   const [type, setType] = useState('Todo');
   const dispatch = useDispatch();
-
+  const Typelist=useSelector((state)=>state.todos.items.map(ele=>ele.type));
   const handleSave = () => {
     dispatch(addTodo({ title, message, type }));
+    setTitle("");
+    setMessage("");
+    setType('Todo');
     onClose();
   };
 
@@ -42,9 +45,7 @@ const AddTodoModal = ({ isOpen, onClose }) => {
             value={type}
             onChange={(e) => setType(e.target.value)}
           >
-            <option value="Todo">Todo</option>
-            <option value="Progress">Progress</option>
-            <option value="Closed">Closed</option>
+           {Typelist.map((ele,index)=>(<option key={index} value={ele}>{ele}</option>))}
           </select>
         </div>
         <div className="flex justify-end">

@@ -134,15 +134,17 @@
 
 // export default TodoList;
 
-import { useState } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import AddTodoModal from './AddTodoModal';
-import TodoColumn from './TodoColumn';
-import { useSelector } from 'react-redux';
+import { useState } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import AddTodoModal from "./AddTodoModal";
+import TodoColumn from "./TodoColumn";
+import { useSelector } from "react-redux";
+import AddTodocontainer from "./AddTodocontainer";
 
 const TodoList = () => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [iscontainerOpen, setcontainerOpen] = useState(false);
   const todoTypes = useSelector((state) => state.todos.items);
   return (
     <DndProvider backend={HTML5Backend}>
@@ -153,20 +155,25 @@ const TodoList = () => {
         >
           Add Todo
         </button>
-        <button className='bg-blue-500 text-white px-4 py-2 rounded ml-3'>Add Todo Container</button>
+        <button className="bg-blue-500 text-white px-4 py-2 rounded ml-3" onClick={()=>setcontainerOpen(true)}>
+          Add Todo Container
+        </button>
         <div className="flex justify-between mt-4">
           {/* <TodoColumn type="Todo" />
           <TodoColumn type="Progress" />
           <TodoColumn type="Closed" /> */}
-          {todoTypes.map((ele)=>(
-           <TodoColumn key={ele.id} type={ele.type}/>
+          {todoTypes.map((ele) => (
+            <TodoColumn key={ele.id} type={ele.type} />
           ))}
         </div>
-        <AddTodoModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+        <AddTodoModal
+          isOpen={isModalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+        <AddTodocontainer isOpen={iscontainerOpen} onClose={()=>setcontainerOpen(false)}/>
       </div>
     </DndProvider>
   );
 };
 
 export default TodoList;
-
