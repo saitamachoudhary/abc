@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import { useDispatch,useSelector} from 'react-redux';
-import { addTodo } from '../Store/todoSlice';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodo, fetchTodos } from "../Store/todoSlice";
 
 const AddTodoModal = ({ isOpen, onClose }) => {
-  const [title, setTitle] = useState('');
-  const [message, setMessage] = useState('');
-  const [type, setType] = useState('Todo');
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [type, setType] = useState("Todos");
   const dispatch = useDispatch();
-  const Typelist=useSelector((state)=>state.todos.items.map(ele=>ele.type));
+  const Typelist = useSelector((state) =>
+    state.todos.items.map((ele) => ele.Type)
+  );
   const handleSave = () => {
     dispatch(addTodo({ title, message, type }));
     setTitle("");
     setMessage("");
-    setType('Todo');
+    setType("Todos");
     onClose();
   };
 
@@ -45,12 +47,26 @@ const AddTodoModal = ({ isOpen, onClose }) => {
             value={type}
             onChange={(e) => setType(e.target.value)}
           >
-           {Typelist.map((ele,index)=>(<option key={index} value={ele}>{ele}</option>))}
+            {Typelist.map((ele, index) => (
+              <option key={index} value={ele}>
+                {ele}
+              </option>
+            ))}
           </select>
         </div>
         <div className="flex justify-end">
-          <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={onClose}>Cancel</button>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSave}>Save</button>
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded mr-2"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+            onClick={handleSave}
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>

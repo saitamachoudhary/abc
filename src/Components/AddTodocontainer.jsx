@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { addTodocontainerdiv } from "../Store/todoSlice";
+import { addContainer } from "../Store/todoSlice";
 const AddTodocontainer = ({ isOpen, onClose }) => {
   const [inputVal, setinputVal] = React.useState("");
   const dispatch=useDispatch();
   const handledivcontainer=(e)=>{
     e.preventDefault();
-    dispatch(addTodocontainerdiv({type:inputVal}));
+    dispatch(addContainer({Type:inputVal}));
     setinputVal("")
     onClose();
   }

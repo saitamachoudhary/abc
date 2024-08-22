@@ -134,18 +134,23 @@
 
 // export default TodoList;
 
-import { useState } from "react";
+import { useState,useEffect} from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import AddTodoModal from "./AddTodoModal";
 import TodoColumn from "./TodoColumn";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch} from "react-redux";
 import AddTodocontainer from "./AddTodocontainer";
+import {fetchTodos} from "../Store/todoSlice";
 
 const TodoList = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [iscontainerOpen, setcontainerOpen] = useState(false);
   const todoTypes = useSelector((state) => state.todos.items);
+  const dispatch=useDispatch();
+  useEffect(()=>{
+    dispatch(fetchTodos())
+  },[])
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="p-4">
@@ -163,7 +168,7 @@ const TodoList = () => {
           <TodoColumn type="Progress" />
           <TodoColumn type="Closed" /> */}
           {todoTypes.map((ele) => (
-            <TodoColumn key={ele.id} type={ele.type} />
+            <TodoColumn key={ele._id} type={ele.Type} />
           ))}
         </div>
         <AddTodoModal

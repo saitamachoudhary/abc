@@ -8,7 +8,7 @@ const ItemTypes = {
 };
 
 const TodoColumn = ({ type }) => {
-  const todos = useSelector((state) => state.todos.items.find(item => item.type === type).childrens);
+  const todos = useSelector((state) => state.todos.items.find(item => item.Type === type).SubTodos);
   const dispatch = useDispatch();
 
   const moveItem = (dragIndex, hoverIndex) => {
