@@ -6,13 +6,7 @@ export const fetchTodos=createAsyncThunk('todos/fetchTodos',async()=>{
     return response.data;
 })
 
-// export const postTodos=createAsyncThunk('/todos/postTodos',async(todo)=>{
-//    const response=await axios.post('/api/todos',todo);
-//    return response.data;
-// })
-
 export const addContainer=createAsyncThunk('addcontainer/todos',async(todos)=>{
-  console.log(todos)
   const response=await axios.post('/api/todos',todos);
   return response.data;
 })
@@ -21,6 +15,13 @@ export const addTodo=createAsyncThunk('todos/addTodos',async(todos)=>{
   const response=await axios.post('/api/todos/subTodos',todos)
   return response.data;
 })
+
+export const moveTodo=createAsyncThunk('todos/moveTodos',async(todos)=>{
+  const response=await axios.put('/api/todos/moveTodos',todos);
+  // console.log(response);
+   return response.data;
+})
+
 
 const initialState = {
   // items: [
@@ -46,19 +47,19 @@ const todoSlice = createSlice({
     //     item.childrens.push({ id: nanoid(), title, message });
     //   }
     // },
-    moveTodo: (state, action) => {
-      const { sourceType, targetType, todoId } = action.payload;
-      const source = state.items.find((item) => item.type === sourceType);
-      const target = state.items.find((item) => item.type === targetType);
-      const todo = source.childrens.find((child) => child.id === todoId);
+    // moveTodo: (state, action) => {
+    //   const { sourceType, targetType, todoId } = action.payload;
+    //   const source = state.items.find((item) => item.type === sourceType);
+    //   const target = state.items.find((item) => item.type === targetType);
+    //   const todo = source.childrens.find((child) => child.id === todoId);
 
-      if (todo) {
-        source.childrens = source.childrens.filter(
-          (child) => child.id !== todoId
-        );
-        target.childrens.push(todo);
-      }
-    },
+    //   if (todo) {
+    //     source.childrens = source.childrens.filter(
+    //       (child) => child.id !== todoId
+    //     );
+    //     target.childrens.push(todo);
+    //   }
+    // },
     reorderTodo: (state, action) => {
       const { type, sourceIndex, destinationIndex } = action.payload;
       const item = state.items.find((item) => item.type === type);
@@ -86,16 +87,30 @@ const todoSlice = createSlice({
       state.items.push(action.payload);
     })
     .addCase(addTodo.fulfilled,(state,action)=>{
-      const{addTodo,type}=action.payload;
-      const findcontainer=state.items.find((item)=>item.Type===type);
-      findcontainer.SubTodos.push(addTodo);
+      // const{addTodo,type}=action.payload;
+      // const findcontainer=state.items.find((item)=>item.Type===type);
+      // findcontainer.SubTodos.push(addTodo);
+      console.log(action.payload);
+      const{_id,Type,SubTodos}=action.payload;
+      const findcontainer=state.items.find((item)=>item.Type===Type);
+      findcontainer.SubTodos=SubTodos;
+    })
+    .addCase(moveTodo.fulfilled,(state,action)=>{
+      const{sourceType, targetType, todoId}=action.payload;
+      const source = state.items.find((item) => item.Type === sourceType);
+      const target = state.items.find((item) => item.Type === targetType);
+      const todo=source.SubTodos.find((item)=>item._id===todoId);
+      if(todo){
+        source.SubTodos=source.SubTodos.filter((child)=>child._id!==todoId);
+      }
+      target.SubTodos.push(todo);
     })
   }
 });
 
 export const {
   // addTodo,
-  moveTodo,
+  // moveTodo,
   reorderTodo,
   deleteTodo,
   addTodocontainerdiv,

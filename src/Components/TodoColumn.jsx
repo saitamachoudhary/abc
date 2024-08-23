@@ -39,7 +39,7 @@ const TodoColumn = ({ type }) => {
       {
         (todos.length>0)?(
           todos.map((todo, index) => (
-            <TodoItem key={todo.id} todo={todo} index={index} type={type} moveItem={moveItem} />
+            <TodoItem key={todo._id} todo={todo} index={index} type={type} moveItem={moveItem} />
           ))
         )
         :(

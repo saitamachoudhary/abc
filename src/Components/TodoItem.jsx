@@ -42,7 +42,8 @@ const TodoItem = ({ todo, index, type, moveItem }) => {
 
   const [, drag] = useDrag({
     type: ItemTypes.TODO,
-    item: { id: todo.id, index, type },
+    item: { id: todo._id, index, type },
+    // item: { id: todo, index, type },
   });
 
   drag(drop(ref));
@@ -59,7 +60,7 @@ const TodoItem = ({ todo, index, type, moveItem }) => {
         </div>
         <MdDelete
           onClick={() => {
-            dispatch(deleteTodo({ type: type, id: todo.id }));
+            dispatch(deleteTodo({ type: type, id: todo._id }));
           }}
         />
       </div>
