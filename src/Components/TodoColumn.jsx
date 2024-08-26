@@ -38,9 +38,11 @@ const TodoColumn = ({ type }) => {
       <h2 className="font-bold text-lg mb-4">{type}</h2>
       {
         (todos.length>0)?(
-          todos.map((todo, index) => (
-            <TodoItem key={todo._id} todo={todo} index={index} type={type} moveItem={moveItem} />
-          ))
+          todos.map((todo, index) =>{
+            if(todo._id){
+              return <TodoItem key={todo._id} todo={todo} index={index} type={type} moveItem={moveItem} />
+            }
+          })
         )
         :(
           <p>No Todos</p>
