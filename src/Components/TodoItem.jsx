@@ -43,7 +43,6 @@ const TodoItem = ({ todo, index, type, moveItem }) => {
   const [, drag] = useDrag({
     type: ItemTypes.TODO,
     item: { id: todo._id, index, type },
-    // item: { id: todo, index, type },
   });
 
   drag(drop(ref));

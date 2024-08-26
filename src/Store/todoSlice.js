@@ -1,4 +1,4 @@
-import { createSlice, nanoid,createAsyncThunk} from "@reduxjs/toolkit";
+import { createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import axios from 'axios';
 
 export const fetchTodos=createAsyncThunk('todos/fetchTodos',async()=>{
@@ -18,8 +18,17 @@ export const addTodo=createAsyncThunk('todos/addTodos',async(todos)=>{
 
 export const moveTodo=createAsyncThunk('todos/moveTodos',async(todos)=>{
   const response=await axios.put('/api/todos/moveTodos',todos);
-  // console.log(response);
    return response.data;
+})
+
+export const reorderTodo=createAsyncThunk('todos/reorderTodos',async(todos)=>{
+  const response=await axios.put('/api/todos/reorderTodos',todos);
+  return response.data;
+})
+
+export const deleteTodo=createAsyncThunk('todos/deleteTodos',async(todos)=>{
+  const response=await axios.delete('/api/todos/deleteTodos',{data:todos});
+  return response.data;
 })
 
 
@@ -60,24 +69,24 @@ const todoSlice = createSlice({
     //     target.childrens.push(todo);
     //   }
     // },
-    reorderTodo: (state, action) => {
-      const { type, sourceIndex, destinationIndex } = action.payload;
-      const item = state.items.find((item) => item.type === type);
+    // reorderTodo: (state, action) => {
+    //   const { type, sourceIndex, destinationIndex } = action.payload;
+    //   const item = state.items.find((item) => item.type === type);
 
-      if (item && sourceIndex !== destinationIndex) {
-        const temp = item.childrens[sourceIndex];
-        item.childrens[sourceIndex] = item.childrens[destinationIndex];
-        item.childrens[destinationIndex] = temp;
-      }
-    },
-    deleteTodo: (state, action) => {
-      const { type, id } = action.payload;
-      const item = state.items.find((ele) => ele.type === type);
-      const todos = item.childrens.filter((item) => item.id !== id);
-      if (todos) {
-        item.childrens = todos;
-      }
-    },
+    //   if (item && sourceIndex !== destinationIndex) {
+    //     const temp = item.childrens[sourceIndex];
+    //     item.childrens[sourceIndex] = item.childrens[destinationIndex];
+    //     item.childrens[destinationIndex] = temp;
+    //   }
+    // },
+    // deleteTodo: (state, action) => {
+    //   const { type, id } = action.payload;
+    //   const item = state.items.find((ele) => ele.type === type);
+    //   const todos = item.childrens.filter((item) => item.id !== id);
+    //   if (todos) {
+    //     item.childrens = todos;
+    //   }
+    // },
   },
   extraReducers:(builder)=>{
     builder.addCase(fetchTodos.fulfilled,(state,action)=>{
@@ -87,10 +96,6 @@ const todoSlice = createSlice({
       state.items.push(action.payload);
     })
     .addCase(addTodo.fulfilled,(state,action)=>{
-      // const{addTodo,type}=action.payload;
-      // const findcontainer=state.items.find((item)=>item.Type===type);
-      // findcontainer.SubTodos.push(addTodo);
-      console.log(action.payload);
       const{_id,Type,SubTodos}=action.payload;
       const findcontainer=state.items.find((item)=>item.Type===Type);
       findcontainer.SubTodos=SubTodos;
@@ -105,14 +110,28 @@ const todoSlice = createSlice({
       }
       target.SubTodos.push(todo);
     })
+    .addCase(reorderTodo.fulfilled,(state,action)=>{
+      const{_id,Type,SubTodos}=action.payload;
+      const item=state.items.find((ele)=>ele.Type===Type);
+      item.SubTodos=SubTodos;
+    })
+    .addCase(deleteTodo.fulfilled,(state,action)=>{
+      const{Type,subtodo_id}=action.payload;
+      console.log(Type,subtodo_id);
+      const item=state.items.find(ele=>ele.Type===Type);
+      const todo=item.SubTodos.filter(ele=>ele._id!==subtodo_id);
+      if(todo){
+        item.SubTodos=todo;
+      }
+    })
   }
 });
 
-export const {
-  // addTodo,
-  // moveTodo,
-  reorderTodo,
-  deleteTodo,
-  addTodocontainerdiv,
-} = todoSlice.actions;
+// export const {
+//   addTodo,
+//   moveTodo,
+//   reorderTodo,
+//   deleteTodo,
+//   addTodocontainerdiv,
+// } = todoSlice.actions;
 export default todoSlice.reducer;
