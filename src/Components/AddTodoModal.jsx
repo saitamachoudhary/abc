@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addTodo, fetchTodos } from "../Store/todoSlice";
+import { addTodo} from "../Store/todoSlice";
 
 const AddTodoModal = ({ isOpen, onClose }) => {
+  const[validateTitle,setvalidateTitle]=useState(false);
+  const[validateMessage,setvalidateMessage]=useState(false);
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [type, setType] = useState("Todos");
@@ -10,12 +12,18 @@ const AddTodoModal = ({ isOpen, onClose }) => {
   const Typelist = useSelector((state) =>
     state.todos.items.map((ele) => ele.Type)
   );
+  
   const handleSave = () => {
-    dispatch(addTodo({ title, message, type }));
-    setTitle("");
-    setMessage("");
-    setType("Todos");
-    onClose();
+      if(title.length===0||message.length===0){
+        setvalidateTitle(true);
+        setvalidateMessage(true);
+        return;
+      }
+      dispatch(addTodo({ title, message, type }));
+      setTitle("");
+      setMessage("");
+      setType("Todos");
+      onClose();
   };
 
   if (!isOpen) return null;
@@ -31,6 +39,9 @@ const AddTodoModal = ({ isOpen, onClose }) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
+          <p className={`text-red-400 ${validateTitle ? `flex` : `hidden`}`}>
+            Required
+          </p>
         </div>
         <div className="mb-2">
           <label className="block">Message:</label>
@@ -39,6 +50,9 @@ const AddTodoModal = ({ isOpen, onClose }) => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
+          <p className={`text-red-400 ${validateMessage ? `flex` : `hidden`}`}>
+            Required
+          </p>
         </div>
         <div className="mb-2">
           <label className="block">Type:</label>

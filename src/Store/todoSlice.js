@@ -31,6 +31,11 @@ export const deleteTodo=createAsyncThunk('todos/deleteTodos',async(todos)=>{
   return response.data;
 })
 
+export const editTodo=createAsyncThunk('todos/editTodos',async(todos)=>{
+  const response=await axios.put('/api/todos/editTodos',todos);
+  return response.data;
+})
+
 
 const initialState = {
   // items: [
@@ -96,7 +101,7 @@ const todoSlice = createSlice({
       state.items.push(action.payload);
     })
     .addCase(addTodo.fulfilled,(state,action)=>{
-      const{_id,Type,SubTodos}=action.payload;
+      const{Type,SubTodos}=action.payload;
       const findcontainer=state.items.find((item)=>item.Type===Type);
       findcontainer.SubTodos=SubTodos;
     })
@@ -111,7 +116,7 @@ const todoSlice = createSlice({
       target.SubTodos.push(todo);
     })
     .addCase(reorderTodo.fulfilled,(state,action)=>{
-      const{_id,Type,SubTodos}=action.payload;
+      const{Type,SubTodos}=action.payload;
       const item=state.items.find((ele)=>ele.Type===Type);
       item.SubTodos=SubTodos;
     })
@@ -123,6 +128,12 @@ const todoSlice = createSlice({
       if(todo){
         item.SubTodos=todo;
       }
+    })
+    .addCase(editTodo.fulfilled,(state,action)=>{
+      const{Type,updateTodo}=action.payload;
+      const item=state.items.find(ele=>ele.Type===Type);
+      const index=item.SubTodos.findIndex(ele=>ele._id===updateTodo._id);
+      item.SubTodos[index]=updateTodo;
     })
   }
 });
